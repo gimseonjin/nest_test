@@ -1,7 +1,9 @@
 import { Stock } from '@/domain/entities/stock.entity';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+@Injectable()
 export class StockRepository {
   constructor(
     @InjectRepository(Stock)

@@ -1,9 +1,11 @@
 import { Product } from '@/domain/entities/product.entity';
 import { ProductSellingType } from '@/domain/types/product-selling.type';
 import { ProductType } from '@/domain/types/product.type';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+@Injectable()
 export class ProductRepository {
   constructor(
     @InjectRepository(Product)

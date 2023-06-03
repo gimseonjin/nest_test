@@ -171,7 +171,7 @@ describe('Order Service', () => {
     );
     const p3 = createProduct(
       '003',
-      ProductType.HANDMADE,
+      ProductType.BAKERY,
       ProductSellingType.STOP_SELLING,
       '크루아상',
       3500,
@@ -189,15 +189,16 @@ describe('Order Service', () => {
     await stockRepo.saveAll([s1, s2]);
 
     // when
-    const res = await osv.createOrder(['001', '001', '002']);
+    const res = await osv.createOrder(['001', '001', '002', '003']);
 
     // then
     expect(res).toMatchObject({
-      totalPrice: 12500,
+      totalPrice: 16000,
       products: [
         { productNumber: '001', price: 4000 },
         { productNumber: '001', price: 4000 },
         { productNumber: '002', price: 4500 },
+        { productNumber: '003', price: 3500 },
       ],
     });
 
@@ -207,4 +208,6 @@ describe('Order Service', () => {
       { productNumber: '002', quantity: 1 },
     ]);
   });
+
+  it('재고는 상품 번호를 가진다.', async () => {});
 });

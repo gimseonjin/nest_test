@@ -1,7 +1,10 @@
-export const ProductType = {
-  HANDMADE: '제조 음료',
-  BOTTLE: '병 음료',
-  BAKERY: '베이커리',
-} as const;
+export class ProductType {
+  static HANDMADE = '제조 음료';
+  static BOTTLE = '병 음료';
+  static BAKERY = '베이커리';
 
-export type ProductType = (typeof ProductType)[keyof typeof ProductType];
+  static containsStockType(type: ProductType): boolean {
+    const sellingType: ProductType[] = [this.BOTTLE, this.HANDMADE];
+    return sellingType.includes(type);
+  }
+}

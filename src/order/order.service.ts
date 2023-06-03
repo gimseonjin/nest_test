@@ -13,11 +13,12 @@ export class OrderService {
   ) {}
 
   async createOrder(ids: string[]) {
-    const dupliacateProducts = await this.productRepository.findAllByProductNumberIn(ids);
+    const dupliacateProducts =
+      await this.productRepository.findAllByProductNumberIn(ids);
 
     const order = Order.create(dupliacateProducts);
 
-    await this.orderRepository.save(order);
+    await this.orderRepository.saveWithStockDecrease(order);
 
     return {
       totalPrice: order.totalPrice,

@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
-import { OrderRepository } from './order/order.repository';
-import { ProductRepository } from './product/product.repository';
+import { OrderProduct } from './entities/order-product.entity';
+import { Order } from './entities/order.entity';
+import { Product } from './entities/product.entity';
+import { Stock } from './entities/stock.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  providers: [ProductRepository, OrderRepository],
-  exports: [ProductRepository, OrderRepository],
+  imports: [TypeOrmModule.forFeature([Order, OrderProduct, Product, Stock])],
+  exports: [TypeOrmModule],
 })
 export class DomainModule {}

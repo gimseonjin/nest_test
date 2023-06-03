@@ -1,6 +1,6 @@
-import { ProductRepository } from '@/domain/product/product.repository';
+import { ProductSellingType } from '@/domain/types/product-selling.type';
 import { Inject, Injectable } from '@nestjs/common';
-import { ProductSellingType } from 'src/domain/product/product-selling.type';
+import { ProductRepository } from './product.repository';
 
 @Injectable()
 export class ProductService {

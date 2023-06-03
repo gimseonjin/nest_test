@@ -13,10 +13,16 @@ export class ProductRepository {
   ) {}
 
   async findAllByProductNumberIn(ids: string[]) {
-    return await this.productRepo
+    const products = await this.productRepo
       .createQueryBuilder('product')
       .where('product.productNumber IN (:...ids)', { ids })
       .getMany();
+
+    const dupliacateProducts = ids.map((x) => {
+      return products.find((y) => y.productNumber == x);
+    });
+
+    return dupliacateProducts;
   }
 
   async findAllBySellingTypeIn(ids: ProductSellingType[]) {

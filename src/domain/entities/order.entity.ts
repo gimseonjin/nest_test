@@ -10,7 +10,7 @@ import { OrderProduct } from './order-product.entity';
 import { BaseEntity } from './base.entity';
 import { Product } from './product.entity';
 
-@Entity("Orders")
+@Entity('Orders')
 export class Order extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -24,7 +24,9 @@ export class Order extends BaseEntity {
   @CreateDateColumn()
   registeredDate: Date;
 
-  @OneToMany(() => OrderProduct, (orderproduct) => orderproduct.order, { cascade: ["insert", "update"] })
+  @OneToMany(() => OrderProduct, (orderproduct) => orderproduct.order, {
+    cascade: ['insert', 'update'],
+  })
   orderProducts: OrderProduct[];
 
   static create(products: Product[]) {
@@ -37,7 +39,6 @@ export class Order extends BaseEntity {
       .reduce((x1, x2) => {
         return x1 + x2;
       });
-
 
     entity.orderProducts = products.map((x) => {
       const op = new OrderProduct();

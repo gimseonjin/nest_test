@@ -1,5 +1,6 @@
 import { OrderProduct } from '@/domain/entities/order-product.entity';
 import { Order } from '@/domain/entities/order.entity';
+import { Product } from '@/domain/entities/product.entity';
 import { Stock } from '@/domain/entities/stock.entity';
 import { OrderStatus } from '@/domain/types/order.type';
 import { ProductType } from '@/domain/types/product.type';
@@ -14,6 +15,17 @@ export class OrderRepository {
     private readonly orderRepo: Repository<Order>,
   ) {}
 
+  private getProductCounts(products: Product[]) {
+    return products.reduce((counts, op) => {
+      const productNumber = op.productNumber;
+      if (!counts[productNumber]) {
+        counts[productNumber] = 0;
+      }
+      counts[productNumber]++;
+      return counts;
+    }, {} as { [productNumber: string]: number });
+  }
+
   async saveWithStockDecrease(entity: {
     orderStatus: OrderStatus;
     totalPrice: number;
@@ -25,14 +37,7 @@ export class OrderRepository {
       .filter((product) => ProductType.containsStockType(product.productType));
 
     // 상품 개수 counting
-    const productCounts = products.reduce((counts, op) => {
-      const productNumber = op.productNumber;
-      if (!counts[productNumber]) {
-        counts[productNumber] = 0;
-      }
-      counts[productNumber]++;
-      return counts;
-    }, {} as { [productNumber: string]: number });
+    const productCounts = this.getProductCounts(products)
 
     // Transaction
     await this.orderRepo.manager.transaction(async (em: EntityManager) => {
@@ -67,6 +72,6 @@ export class OrderRepository {
       orderProducts: OrderProduct[];
     }[],
   ) {
-    await Promise.all(entities.map((entity) => this.save(entity)));
+    await this.orderRepo.save(entities)
   }
 }

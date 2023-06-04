@@ -27,6 +27,7 @@ describe('Order Service', () => {
           database: ':memory:',
           synchronize: true,
           dropSchema: true,
+          logging: true,
           entities: [Product, Stock, Order, OrderProduct],
         }),
         DomainModule,
@@ -209,5 +210,27 @@ describe('Order Service', () => {
     ]);
   });
 
-  it('재고는 상품 번호를 가진다.', async () => {});
+  it('재고가 부족한 상품은 구매할 수 없다.', async () => {
+    // given
+    const p1 = createProduct(
+      '001',
+      ProductType.HANDMADE,
+      ProductSellingType.SELLING,
+      '아메리카노',
+      4000,
+    );
+
+    const s1 = new Stock();
+    s1.productNumber = '001';
+    s1.quantity = 1;
+
+    await productRepo.save(p1);
+    await stockRepo.save(s1);
+
+    // when
+    const res = () => osv.createOrder(['001', '001']);
+
+    // then
+    expect(res).rejects.toThrow(new Error("재고가 부족합니다."))
+  });
 });
